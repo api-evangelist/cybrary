@@ -1,0 +1,54 @@
+generated: '2026-08-04'
+method: searched
+source: https://help.cybrary.it/completions-export-integration
+summary: >-
+  Cybrary publishes no API versioning policy, no deprecation policy, no changelog and
+  no working status page. The one lifecycle signal that exists is the help-center
+  article's own revision date. Recorded as absence, which is valid data.
+versioning:
+  scheme: none
+  current: null
+  docs: null
+  note: >-
+    The base path carries no version segment (/courses/api/integrations/completions)
+    and no version header is documented or observed. The documentation notes the verb
+    "will currently always state completed in the current implementation", implying
+    forward change without a version signal.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: no RFC 8594 Sunset or Deprecation header observed on any documented endpoint
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  probed:
+  - {url: 'https://status.cybrary.it/', http_status: 502, note: 'DNS resolves to CloudFront; origin failed — no status page is being served'}
+  - {url: 'https://status.cybrary.it/api/v2/status.json', http_status: 502}
+  - {url: 'https://cybrary.statuspage.io/', http_status: 200, note: 'redirects to the Atlassian Statuspage marketing site, not a Cybrary status page — rejected'}
+  note: >-
+    A status hostname exists but serves nothing. Incidents are instead announced as a
+    banner inside the marketing site — an AWS outage notice was rendered on
+    www.cybrary.it on 2026-08-04 — which is not machine-readable.
+  verdict: no working status page; no StatusPage pointer emitted
+changelog:
+  url: null
+  note: >-
+    No API changelog or release-notes page. The only dated signal is the help-center
+    article revision line, "December 16, 2025", on the Completions Export Integration
+    page.
+  last_documentation_update: '2025-12-16'
+roadmap:
+  url: null
+docs_revision:
+  url: https://help.cybrary.it/completions-export-integration
+  date: '2025-12-16'
+  http_status: 200
+gaps:
+- No API version identifier of any kind.
+- No deprecation or sunset policy.
+- No changelog / release notes.
+- Status hostname configured but returning 502; incident communication is a marketing-site banner.

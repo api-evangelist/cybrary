@@ -1,0 +1,84 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Cybrary Completions Export API
+  version: 1.0.0
+extends: openapi/cybrary-completions-export-openapi.yml
+x-generated: '2026-08-04'
+x-method: generated
+x-source: >-
+  Enhancements derived from API Evangelist artifacts in this repository and from live
+  probes of app.cybrary.it on 2026-08-04. Records what API Evangelist added on top of
+  Cybrary's published prose documentation, so the underlying specification stays
+  auditable against the source.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provenance: >-
+      Specification authored by API Evangelist from Cybrary's published prose
+      documentation; not published by Cybrary.
+    x-apievangelist-artifacts:
+      authentication: authentication/cybrary-authentication.yml
+      scopes: scopes/cybrary-scopes.yml
+      conventions: conventions/cybrary-conventions.yml
+      errors: errors/cybrary-problem-types.yml
+      lifecycle: lifecycle/cybrary-lifecycle.yml
+      conformance: conformance/cybrary-conformance.yml
+      data_model: data-model/cybrary-data-model.yml
+      rate_limits: rate-limits/cybrary-rate-limits.yml
+      agentic_access: agentic-access/cybrary-agentic-access.yml
+      skills: skills/_index.yml
+- target: $.info
+  update:
+    x-apievangelist-standards:
+    - xAPI (Experience API) 1.0 / ADL
+    - OAuth 2.0 (RFC 6749)
+- target: $.servers[0]
+  update:
+    x-rate-limit-headers:
+    - X-RateLimit-Limit
+    - X-RateLimit-Remaining
+    x-rate-limit-observed: 100000
+    x-rate-limit-reset-header: null
+    x-rate-limit-note: >-
+      Observed on live responses 2026-08-04; Cybrary publishes no rate-limit policy
+      and returns no reset or Retry-After header.
+- target: $.paths['/integrations/completions'].get
+  update:
+    x-apievangelist-note: >-
+      Call this before requesting a dated export — there is no published retention
+      window, so the available range is only knowable from this response.
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      data-sensitivity: pii
+- target: $.paths['/integrations/completions/latest'].get
+  update:
+    x-apievangelist-note: >-
+      Preferred operation for an incremental daily sync. Exports may include
+      completions for past dates, so downstream ingestion must deduplicate on
+      (actor.account.name, object.id, timestamp).
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      data-sensitivity: pii
+- target: $.paths['/integrations/completions/{date}'].get
+  update:
+    x-apievangelist-note: >-
+      The list response uses MM_DD_YYYY while the generated filename uses DD_MM_YYYY.
+      Use the `date` value returned by listCompletionExports rather than formatting one.
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      data-sensitivity: pii
+- target: $.components.responses.ServerError
+  update:
+    x-apievangelist-note: >-
+      Unauthenticated requests to the export endpoints return 500, not 401. Treat a
+      500 on these paths as a probable auth failure before treating it as an outage.
+- target: $.components.schemas.Actor
+  update:
+    x-pii: true
+    x-pii-fields: [name, mbox]
+    x-apievangelist-note: >-
+      Every export carries learner names and email addresses. Handle under the
+      customer's own data-protection controls.

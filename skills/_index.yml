@@ -1,0 +1,19 @@
+generated: '2026-08-04'
+method: generated
+source: openapi/cybrary-completions-export-openapi.yml
+note: >-
+  Authored by API Evangelist. Cybrary publishes no AGENTS.md or skill files; a search
+  of help.cybrary.it, www.cybrary.it and github.com/Cybrary on 2026-08-04 found none.
+  Every operationId referenced below exists verbatim in the referenced specification.
+skills:
+- file: cybrary-export-completions-to-lms.md
+  name: Export Cybrary completions as xAPI statements
+  description: >-
+    Authenticate with OAuth 2.0 client credentials, discover available daily exports,
+    and pull completion events as xAPI statements for ingestion into an LMS, HRIS or
+    reporting warehouse.
+  api: openapi/cybrary-completions-export-openapi.yml
+  operations:
+  - listCompletionExports
+  - getLatestCompletionExport
+  - getCompletionExportByDate

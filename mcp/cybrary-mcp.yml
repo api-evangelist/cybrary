@@ -1,0 +1,41 @@
+generated: '2026-08-04'
+method: derived
+source: openapi/cybrary-completions-export-openapi.yml
+status: candidate
+summary: >-
+  No official hosted or remote Model Context Protocol server was found for Cybrary.
+  The candidate tool set below is DERIVED by API Evangelist from the three documented
+  Completions Export operations as a proposal for an agent-facing surface. NOT
+  PUBLISHED BY CYBRARY. No `MCPServer` pointer is wired in apis.yml, because no server
+  exists.
+server: null
+transport: null
+searched:
+- {source: 'provider docs help.cybrary.it', result: none, checked: '2026-08-04'}
+- {source: 'https://github.com/Cybrary', result: none, checked: '2026-08-04'}
+- {source: 'web search for a Cybrary MCP server', result: none, checked: '2026-08-04'}
+- {source: 'https://www.cybrary.it/llms.txt', result: 'llms.txt exists but lists only marketing and learning-hub pages; no tools, no API, no MCP endpoint', checked: '2026-08-04'}
+auth:
+  type: oauth2
+  flow: clientCredentials
+  token_url: https://app.cybrary.it/auth/oauth/token
+  scope: use-integrations
+  note: credentials are issued by Cybrary to the customer, so any MCP server would be
+    per-tenant and gated
+candidate_tools:
+- name: list_completion_exports
+  maps_to: GET /integrations/completions
+  source_operation: openapi/cybrary-completions-export-openapi.yml#listCompletionExports
+  description: List the dates for which a completion export is available.
+- name: get_latest_completion_export
+  maps_to: GET /integrations/completions/latest
+  source_operation: openapi/cybrary-completions-export-openapi.yml#getLatestCompletionExport
+  description: Retrieve the most recent daily completion export as xAPI statements.
+- name: get_completion_export_by_date
+  maps_to: GET /integrations/completions/{date}
+  source_operation: openapi/cybrary-completions-export-openapi.yml#getCompletionExportByDate
+  description: Retrieve the completion export for a specific UTC date as xAPI statements.
+notes:
+- All three candidate tools are read-only; there is no write surface to expose.
+- Exports carry learner names and email addresses, so any agent surface over this API
+  handles PII and should be scoped accordingly. See agentic-access/.

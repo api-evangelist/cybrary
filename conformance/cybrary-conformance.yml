@@ -1,0 +1,90 @@
+generated: '2026-08-04'
+method: searched
+source: https://help.cybrary.it/completions-export-integration
+also: https://help.cybrary.it/self-service-guide-to-saml-2.0-sso-configuration-for-okta-onelogin-and-azure
+summary: >-
+  Cross-cutting standards Cybrary's public integration surface conforms to. The
+  payload standard is the strongest signal here: completion exports are ADL xAPI
+  statements, not a proprietary shape. Enterprise identity is standards-based
+  (SAML 2.0 + SCIM 2.0). Nothing in the HTTP layer follows the newer API-hygiene
+  RFCs — no problem+json, no security.txt, no Sunset/Deprecation headers.
+standards:
+- id: xapi
+  name: xAPI (Experience API) 1.0 / ADL
+  conforms: true
+  evidence: >-
+    Documented export format is "an array of objects in which each object will contain
+    a set of XAPI statements", using ADL verb IRIs (http://adlnet.gov/expapi/verbs/completed)
+    and ADL activity type IRIs (http://adlnet.gov/expapi/activities/course), with
+    actor/verb/object/result structure and Cybrary-namespaced extensions.
+  source: https://help.cybrary.it/completions-export-integration
+- id: oauth2
+  name: OAuth 2.0 (RFC 6749)
+  conforms: true
+  evidence: >-
+    Client-credentials grant against https://app.cybrary.it/auth/oauth/token with
+    Basic client authentication and a `use-integrations` scope; an unauthenticated
+    POST returned the RFC 6749 error object {"error":"invalid_request","error_description":...}.
+  source: https://help.cybrary.it/completions-export-integration
+- id: scim2
+  name: SCIM 2.0 (RFC 7643 / RFC 7644)
+  conforms: true
+  scope: enterprise provisioning, not the public API
+  evidence: >-
+    Cybrary for Teams documents automatic user provisioning via SCIM, issuing a
+    per-tenant SCIM Base URL / Tenant URL and bearer token for Okta, OneLogin and
+    Microsoft Entra ID. Corroborated by the provider's own GitHub org, which carries
+    a `laravel-scim-server` repository ("SCIM 2.0 Server implementation for Laravel").
+  source: https://help.cybrary.it/self-service-guide-to-saml-2.0-sso-configuration-for-okta-onelogin-and-azure
+  note: The SCIM base URL is customer-specific and is not published, so it is not
+    listed as a public API entry.
+- id: saml2
+  name: SAML 2.0
+  conforms: true
+  scope: enterprise single sign-on, not the public API
+  evidence: >-
+    Self-service SAML 2.0 SSO configuration documented for Okta, OneLogin and Azure,
+    exchanging Identity Provider Issuer URI, SSO URL, X.509 certificate, Audience URI
+    (SP Entity ID) and Assertion Consumer Service endpoint.
+  source: https://help.cybrary.it/self-service-guide-to-saml-2.0-sso-configuration-for-okta-onelogin-and-azure
+- id: openid-connect
+  conforms: false
+  evidence: no /.well-known/openid-configuration served (404 on www.cybrary.it; SPA
+    HTML false-positive on app.cybrary.it)
+- id: rfc8414-oauth-metadata
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: false
+  evidence: /.well-known/oauth-authorization-server returns 404
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors use an RFC 6749 object on the token endpoint and a Laravel `{"message": ...}`
+    envelope on resource endpoints; no application/problem+json was observed.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404, though a disclosure policy page
+    does exist at /responsible-disclosure-program
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header observed; no published deprecation policy
+- id: rfc9421-http-message-signatures
+  conforms: false
+- id: json-api
+  conforms: false
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming or webhook surface is published
+- id: openapi
+  conforms: false
+  evidence: >-
+    Cybrary documents the API in prose only and publishes no machine-readable
+    specification. The OpenAPI in openapi/ was authored by API Evangelist from that
+    prose and is stamped x-provenance published_by_provider:false.
+compliance_program:
+  published: false
+  note: >-
+    No trust center, SOC 2 / ISO 27001 attestation page, or certification list was
+    found on cybrary.it (trust.cybrary.it and security.cybrary.it do not resolve;
+    /trust, /security and /compliance return 404). Cybrary's "Framework Alignment"
+    page maps its TRAINING CONTENT to industry frameworks (e.g. NIST NICE) and is not
+    a corporate compliance attestation, so no `Compliance` pointer is emitted.

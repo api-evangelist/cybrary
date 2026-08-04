@@ -1,0 +1,60 @@
+generated: '2026-08-04'
+method: probed
+source: live GET of /.well-known/* and /llms.txt on every Cybrary host
+summary: >-
+  Cybrary publishes an llms.txt on its marketing host and nothing under /.well-known/.
+  The application host app.cybrary.it is a single-page app whose catch-all returns
+  HTTP 200 with an HTML shell for EVERY path, including every /.well-known/* path
+  probed. Those 200s are NOT discovery documents and are recorded as false positives
+  so a later round does not mistake them for hits.
+hosts:
+- host: www.cybrary.it
+  documents:
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    file: ../llms/cybrary-llms.txt
+  - path: /robots.txt
+    status: 200
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: app.cybrary.it
+  note: >-
+    SPA catch-all — every path below returned HTTP 200 with a `<!doctype html>` body.
+    Rejected as false positives; no discovery document is actually served.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    verdict: false-positive-html
+  - path: /.well-known/openid-configuration
+    status: 200
+    verdict: false-positive-html
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    verdict: false-positive-html
+  - path: /.well-known/api-catalog
+    status: 200
+    verdict: false-positive-html
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    verdict: false-positive-html
+  - path: /.well-known/agent-card.json
+    status: 200
+    verdict: false-positive-html
+  - path: /.well-known/agent.json
+    status: 200
+    verdict: false-positive-html
+security_txt: null
+agent_card: null

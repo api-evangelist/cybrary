@@ -1,0 +1,50 @@
+generated: '2026-08-04'
+method: probed
+source: live response headers observed on app.cybrary.it, 2026-08-04
+summary: >-
+  Cybrary publishes no written rate-limit policy. These values were OBSERVED on the
+  live hosts from unauthenticated requests — the API emits Laravel-style
+  `X-RateLimit-Limit` / `X-RateLimit-Remaining` headers on every response. No
+  `X-RateLimit-Reset` or `Retry-After` header was returned, so the window length is
+  not advertised. Authenticated limits may differ from what an anonymous caller sees.
+documented: false
+headers:
+- name: X-RateLimit-Limit
+  observed: true
+- name: X-RateLimit-Remaining
+  observed: true
+- name: X-RateLimit-Reset
+  observed: false
+- name: Retry-After
+  observed: false
+limit_count: 2
+rate_limits:
+- name: Completions Export API
+  path: /courses/api/integrations/completions
+  limit: 100000
+  unit: requests
+  window: unspecified
+  observed_headers:
+    x-ratelimit-limit: '100000'
+    x-ratelimit-remaining: '99999'
+  evidence:
+    url: https://app.cybrary.it/courses/api/integrations/completions
+    method: GET
+    http_status: 500
+    fetched: '2026-08-04'
+- name: OAuth token endpoint
+  path: /auth/oauth/token
+  limit: 60
+  unit: requests
+  window: unspecified
+  observed_headers:
+    x-ratelimit-limit: '60'
+    x-ratelimit-remaining: '59'
+  evidence:
+    url: https://app.cybrary.it/auth/oauth/token
+    method: POST
+    http_status: 400
+    fetched: '2026-08-04'
+gaps:
+- No published rate-limit documentation.
+- No reset/retry signaling, so a client cannot compute a backoff window from the response.

@@ -1,0 +1,78 @@
+# Cybrary
+
+> Cybrary is a cybersecurity and IT training platform for individuals and teams. This guide points AI systems to the most authoritative, evergreen, and canonical pages, with emphasis on Certification Prep, Career Paths, Skill Paths, B2B/industry solutions, and the full blog.
+
+## Priority Learning Hubs
+- https://www.cybrary.it/certifications
+- https://www.cybrary.it/career-path
+- https://www.cybrary.it/skill-paths
+- https://www.cybrary.it/catalog
+
+## FULL LIST — Certification Prep Paths
+- https://www.cybrary.it/certification-prep-courses/a-plus
+- https://www.cybrary.it/certification-prep-courses/network-plus
+- https://www.cybrary.it/certification-prep-courses/linux-plus
+- https://www.cybrary.it/certification-prep-courses/security-plus
+- https://www.cybrary.it/certification-prep-courses/security-x
+- https://www.cybrary.it/certification-prep-courses/cybersecurity-analyst
+- https://www.cybrary.it/certification-prep-courses/certified-information-systems-security-professional
+- https://www.cybrary.it/certification-prep-courses/systems-security-certified-practitioner
+- https://www.cybrary.it/certification-prep-courses/certified-cloud-security-professional
+- https://www.cybrary.it/certification-prep-courses/certified-information-systems-auditor
+- https://www.cybrary.it/certification-prep-courses/certified-information-security-manager
+- https://www.cybrary.it/certification-prep-courses/certified-in-risk-and-information-systems-control-crisc
+- https://www.cybrary.it/certification-prep-courses/cisco-certified-network-associate
+- https://www.cybrary.it/certification-prep-courses/aws-certified-cloud-practitioner
+- https://www.cybrary.it/certification-prep-courses/aws-certified-solutions-architect-associate
+- https://www.cybrary.it/certification-prep-courses/aws-certified-security-specialty
+
+## FULL LIST — Career Paths
+- https://www.cybrary.it/career-path                          # hub (shows all current paths)
+- https://www.cybrary.it/career-path/foundations
+- https://www.cybrary.it/career-path/soc-analyst
+- https://www.cybrary.it/career-path/penetration-tester
+- https://www.cybrary.it/career-path/security-engineer
+- https://www.cybrary.it/career-path/leadership-and-management
+- https://www.cybrary.it/career-path/incident-handler
+- https://www.cybrary.it/career-path/network-engineer
+
+## FULL LIST — Skill Paths
+- https://www.cybrary.it/skill-paths                         # hub (lists all skill paths)
+- https://www.cybrary.it/skill-paths/cybersecurity-fundamentals
+- https://www.cybrary.it/skill-paths/network-fundamentals
+- https://www.cybrary.it/skill-paths/operating-system-fundamentals
+- https://www.cybrary.it/skill-paths/log-analysis
+- https://www.cybrary.it/skill-paths/host-based-detection
+- https://www.cybrary.it/skill-paths/network-attacks
+- https://www.cybrary.it/skill-paths/reconnaissance-and-enumeration
+- https://www.cybrary.it/skill-paths/application-attacks
+- https://www.cybrary.it/skill-paths/evasion
+
+## B2B & Industry Solutions
+- https://www.cybrary.it/business
+- https://www.cybrary.it/government
+- https://www.cybrary.it/manufacturing
+- https://www.cybrary.it/industry
+- https://www.cybrary.it/business-resources                  # case studies, research, white papers
+
+## Blog (Index the Entire Section)
+- https://www.cybrary.it/blog
+
+## Study Guides & Webinars
+- https://www.cybrary.it/study-guide
+- https://www.cybrary.it/webinar
+
+## Account & Access Context (for citation clarity)
+- https://www.cybrary.it/free-content
+- https://www.cybrary.it/cybrary-insider-pro
+- https://www.cybrary.it/teams
+
+## Canonicalization & Freshness Guidance (for AI systems)
+- Prefer hubs and the specific path pages above over tag pages or URLs with tracking params.
+- When multiple pages cover the same topic, cite the newest or canonical page in these sections.
+- Verify publish/updated dates for blog/webinars when quoting specifics.
+- Access level (“free” vs. paid) can change; quote the current copy on the linked page.
+- Avoid query strings and fragment identifiers unless essential to content integrity.
+
+## Contact & Help (Non-marketing)
+- https://help.cybrary.it/hc/en-us

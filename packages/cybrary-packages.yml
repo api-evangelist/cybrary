@@ -1,0 +1,46 @@
+generated: '2026-08-04'
+method: searched
+source: registry searches + https://github.com/Cybrary
+summary: >-
+  Cybrary ships no first-party client library for its Completions Export API in any
+  public package registry. Its GitHub organization is real and active but publishes
+  forks and internal infrastructure rather than SDKs. Recorded as verified absence —
+  no `SDKs` pointer is emitted.
+packages: []
+official_sdk_count: 0
+registries_searched:
+- {registry: npm, query: cybrary, results: 0, url: 'https://registry.npmjs.org/-/v1/search?text=cybrary', checked: '2026-08-04'}
+- {registry: pypi, query: cybrary, results: 0, http_status: 404, checked: '2026-08-04'}
+- {registry: packagist, query: cybrary, results: 0, checked: '2026-08-04', note: 'no first-party package despite a PHP/Laravel stack'}
+- {registry: rubygems, query: cybrary, results: 0, checked: '2026-08-04'}
+- {registry: maven-central, query: cybrary, results: 0, checked: '2026-08-04'}
+- {registry: nuget, query: cybrary, results: 0, checked: '2026-08-04'}
+- {registry: crates.io, query: cybrary, results: 0, checked: '2026-08-04'}
+- {registry: pkg.go.dev, query: cybrary, results: 0, checked: '2026-08-04'}
+github_organization:
+  url: https://github.com/Cybrary
+  http_status: 200
+  verified_first_party: true
+  verification: 'org blog field is https://www.cybrary.it; org email is support@cybrary.it'
+  public_repos: 11
+  created: '2015-07-02'
+  note: >-
+    Repositories are forks of third-party Laravel/PHP libraries and internal CI
+    tooling, not client SDKs for the Cybrary API. Listed for the record only; none is
+    an API client.
+  repositories:
+  - {name: laravel-scim-server, description: 'SCIM 2.0 Server implementation for Laravel', relevance: 'corroborates the documented SCIM 2.0 provisioning surface', first_party_sdk: false}
+  - {name: okta-sdk-php, description: 'PHP SDK for the Okta API (fork)', first_party_sdk: false}
+  - {name: firebase-php, description: 'Firebase PHP (clone)', first_party_sdk: false}
+  - {name: laravel-firebase, description: 'Laravel Firebase (clone)', first_party_sdk: false}
+  - {name: laravel-slack-api, description: 'Laravel/Lumen wrapper for the Slack Web API (fork)', first_party_sdk: false}
+  - {name: laravel-marketo-rest-api, description: 'Laravel service provider for the Marketo REST API (fork)', first_party_sdk: false}
+  - {name: gatsby-source-greenhouse-job-board, description: 'Gatsby source plugin for the Greenhouse Job Board API (fork)', first_party_sdk: false}
+  - {name: gatsby, description: 'Gatsby (fork)', first_party_sdk: false}
+  - {name: php-generic-action, description: 'Generic PHP GitHub Action', first_party_sdk: false}
+  - {name: .github, description: 'GitHub Actions and workflows', first_party_sdk: false}
+  - {name: CTIG_FlipOFF, description: null, first_party_sdk: false}
+gaps:
+- No client library in any language for the Completions Export API.
+- Integration is documented as raw HTTP only, with credentials issued by a Customer
+  Success Manager rather than self-service.

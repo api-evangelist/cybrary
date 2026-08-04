@@ -1,18 +1,93 @@
 aid: cybrary
 name: Cybrary
-description: 'Cybrary is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Cybrary is a cybersecurity and IT skills-development platform used by
+  individuals and enterprise teams for hands-on training, certification preparation
+  and workforce upskilling. The catalog spans certification prep paths (Security+,
+  CISSP, CISA, CISM, CCSP, CCNA, AWS security tracks), role-based career paths (SOC
+  analyst, penetration tester, security engineer, incident handler, network engineer),
+  skill paths, virtual labs, assessments and security awareness training. Cybrary for
+  Teams adds administrative surfaces for enterprise customers — SAML 2.0 single sign-on
+  with Okta, OneLogin and Microsoft Entra ID, SCIM 2.0 automated user provisioning
+  with a per-tenant base URL and bearer token, bulk user upload, goals and custom
+  career paths. Its one publicly documented API is the Completions Export Integration,
+  an OAuth 2.0 client-credentials REST API that returns daily course, lab, assessment
+  and career-path completion events as xAPI (Experience API) statements for ingestion
+  into a customer LMS, HRIS or reporting warehouse.'
 url: https://raw.githubusercontent.com/api-evangelist/cybrary/refs/heads/main/apis.yml
+image: https://cdn.prod.website-files.com/63eef15e3ff8fd318e9a6888/645ef224f84b330beefae1e7_Cybrary%20Opengraph%20(1).png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-04'
 modified: '2026-08-04'
 tags:
 - Company
-apis: []
+- Cybersecurity
+- Training
+- Education
+- Learning Management
+- Certification
+- Workforce Development
+- xAPI
+- SCIM
+- Security Awareness
+apis:
+- aid: cybrary:completions-export
+  name: Cybrary Completions Export API
+  description: 'REST API that exposes daily completion events for a Cybrary for Teams
+    organization. A completion event is generated whenever a member of the organization
+    completes a course, lab, assessment or career path. Exports are delivered as JSON
+    arrays of xAPI (Experience API / ADL) statements — actor, verb, object and result
+    — with Cybrary extensions carrying the content description id, continuing education
+    units and learning hours. One file is generated per UTC day; the API lists the
+    available export dates, retrieves a specific date, or retrieves the latest. Access
+    is OAuth 2.0 client credentials with the `use-integrations` scope; credentials
+    are issued by Cybrary to the customer.'
+  humanURL: https://help.cybrary.it/completions-export-integration
+  baseURL: https://app.cybrary.it/courses/api
+  tags:
+  - Completions
+  - xAPI
+  - Reporting
+  - Learning Records
+  - Integrations
+  properties:
+  - type: Documentation
+    url: https://help.cybrary.it/completions-export-integration
+  - type: OpenAPI
+    url: openapi/cybrary-completions-export-openapi.yml
+  - type: Overlay
+    url: overlays/cybrary-completions-export-overlay.yaml
+  - type: Authentication
+    url: authentication/cybrary-authentication.yml
+  - type: OAuthScopes
+    url: scopes/cybrary-scopes.yml
+  - type: ErrorCatalog
+    url: errors/cybrary-problem-types.yml
+  - type: DataModel
+    url: data-model/cybrary-data-model.yml
+  - type: RateLimits
+    url: rate-limits/cybrary-rate-limits.yml
+  x-evidence:
+    verified: '2026-08-04'
+    docs_url: https://help.cybrary.it/completions-export-integration
+    docs_http_status: 200
+    docs_names_endpoints: true
+    endpoint_checks:
+    - url: https://app.cybrary.it/courses/api/integrations/completions
+      method: GET
+      http_status: 500
+      note: unauthenticated request; live host answered with a JSON error envelope
+        and x-ratelimit headers
+    - url: https://app.cybrary.it/auth/oauth/token
+      method: GET
+      http_status: 405
+      note: 'Allow: POST — token endpoint present'
+    - url: https://app.cybrary.it/auth/oauth/token
+      method: POST
+      http_status: 400
+      note: returned RFC 6749 error envelope {"error":"invalid_request", ...} confirming
+        a live OAuth 2.0 token endpoint
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +95,67 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/cybrary_stock/
+  url: https://www.cybrary.it/
+- type: Documentation
+  url: https://help.cybrary.it/hc/en-us
+- type: APIReference
+  url: https://help.cybrary.it/completions-export-integration
+- type: GettingStarted
+  url: https://help.cybrary.it/cybrary-for-teams
+- type: Support
+  url: https://help.cybrary.it/hc/en-us
+- type: HelpCenter
+  url: https://help.cybrary.it/hc/en-us
+- type: Blog
+  url: https://www.cybrary.it/blog
+- type: GitHubOrganization
+  url: https://github.com/Cybrary
+- type: Pricing
+  url: https://www.cybrary.it/pricing
+- type: SignUp
+  url: https://www.cybrary.it/register
+- type: Login
+  url: https://app.cybrary.it/login
+- type: TermsOfService
+  url: https://www.cybrary.it/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.cybrary.it/privacy-policy
+- type: Security
+  url: https://www.cybrary.it/responsible-disclosure-program
+- type: VulnerabilityDisclosure
+  url: security/cybrary-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/cybrary-domain-security.yml
+- type: Authentication
+  url: authentication/cybrary-authentication.yml
+- type: OAuthScopes
+  url: scopes/cybrary-scopes.yml
+- type: Conventions
+  url: conventions/cybrary-conventions.yml
+- type: Conformance
+  url: conformance/cybrary-conformance.yml
+- type: ErrorCatalog
+  url: errors/cybrary-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/cybrary-lifecycle.yml
+- type: DataModel
+  url: data-model/cybrary-data-model.yml
+- type: LLMsTxt
+  url: llms/cybrary-llms.txt
+- type: WellKnown
+  url: well-known/cybrary-well-known.yml
+- type: Packages
+  url: packages/cybrary-packages.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/cybrary-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/cybrary-rate-limits.yml
+- type: Overlay
+  url: overlays/cybrary-completions-export-overlay.yaml
+x-enrichment:
+  date: '2026-08-04'
+  status: enriched
+  artifacts_added: 17
+  pass: local-v1

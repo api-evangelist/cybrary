@@ -42,5 +42,60 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Cybrary is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/cybrary_stock/
+Cybrary is a cybersecurity and IT skills-development platform used by individuals and
+enterprise teams for hands-on training, certification preparation and workforce
+upskilling — certification prep paths, role-based career paths, skill paths, virtual
+labs, assessments and security awareness training.
+
+- Website: https://www.cybrary.it/
+- Help center: https://help.cybrary.it/hc/en-us
+- GitHub: https://github.com/Cybrary
+
+## The public API surface
+
+Cybrary publishes **one** documented API.
+
+**Cybrary Completions Export API** — `https://app.cybrary.it/courses/api`
+([docs](https://help.cybrary.it/completions-export-integration)). Three read-only
+operations that return daily Course / Lab / Assessment / Career Path completion events
+for a Cybrary for Teams organization as **xAPI (Experience API) statements**, for
+ingestion into a customer LMS, HRIS or reporting warehouse. Auth is OAuth 2.0 client
+credentials with the `use-integrations` scope; credentials are issued by Cybrary to the
+customer rather than self-service.
+
+Enterprise identity is standards-based but not a public API: **SAML 2.0** single sign-on
+and **SCIM 2.0** automated provisioning are documented for Okta, OneLogin and Microsoft
+Entra ID, with a per-tenant SCIM base URL and bearer token. Because that base URL is
+customer-specific and unpublished, SCIM is recorded in `conformance/` and
+`authentication/` rather than listed as an API.
+
+## Not published by Cybrary
+
+Recorded as verified absence, checked 2026-08-04:
+
+- **No machine-readable specification.** The API is documented in prose only. The
+  OpenAPI in `openapi/` was authored by API Evangelist from that prose and is stamped
+  `x-provenance: published_by_provider: false`. Every path, verb, scope and payload
+  field in it is transcribed from the provider's own documentation.
+- **No SDKs or client libraries** in any public registry (npm, PyPI, Packagist,
+  RubyGems, Maven Central, NuGet, crates.io, pkg.go.dev). The GitHub org is real but
+  publishes forks and internal tooling.
+- **No MCP server, no A2A agent card, no AsyncAPI, no webhooks.** `mcp/` holds an
+  API Evangelist-derived *candidate* tool list only, and carries no `MCPServer` pointer.
+- **No `/.well-known/` documents.** `app.cybrary.it` is a single-page app that answers
+  HTTP 200 with an HTML shell for every `/.well-known/*` path; those are logged as
+  false positives in `well-known/`.
+- **No API versioning, deprecation policy, changelog or working status page.**
+  `status.cybrary.it` resolves but returns 502; incidents are announced as a banner on
+  the marketing site.
+- **No published rate-limit policy.** The `X-RateLimit-*` values in `rate-limits/` were
+  observed on live responses, not documented.
+- **No published compliance program or trust center.**
+
+## Published and captured
+
+- `llms.txt` — Cybrary serves a real one at https://www.cybrary.it/llms.txt, saved
+  verbatim to `llms/`. It points AI systems at learning hubs and the blog; it does not
+  mention the API.
+- **Vulnerability disclosure** — https://www.cybrary.it/responsible-disclosure-program
+  plus a HackerOne program, with safe-harbor language and `report@cybrary.it`.

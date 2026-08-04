@@ -1,0 +1,21 @@
+generated: '2026-08-04'
+method: searched
+source: https://help.cybrary.it/completions-export-integration
+docs: https://help.cybrary.it/completions-export-integration
+derived_from: openapi/cybrary-completions-export-openapi.yml
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://app.cybrary.it/auth/oauth/token
+    scopes: 1
+  description: OAuth 2.0 client credentials. Credentials are issued by Cybrary to the customer
+    organization; client authentication is sent as a HTTP Basic Authorization header.
+  sources:
+  - openapi/cybrary-completions-export-openapi.yml

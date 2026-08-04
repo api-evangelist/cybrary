@@ -1,0 +1,82 @@
+generated: '2026-08-04'
+method: derived
+source: openapi/cybrary-completions-export-openapi.yml
+also_observed: live unauthenticated probes of app.cybrary.it, 2026-08-04
+format: none
+format_note: >-
+  Cybrary does not use RFC 9457 problem+json. Two distinct envelopes are in play: the
+  OAuth token endpoint returns the RFC 6749 error object, and the resource endpoints
+  return a Laravel-style {"message": "..."} envelope. Cybrary publishes no error
+  reference page, so the catalog below is what the specification implies plus what was
+  observed on the wire — not a provider-published list.
+envelopes:
+- name: oauth-error
+  applies_to: https://app.cybrary.it/auth/oauth/token
+  media_type: application/json
+  fields:
+  - {field: error, description: 'RFC 6749 error code, e.g. invalid_request, invalid_client, invalid_scope'}
+  - {field: error_description, description: human-readable description}
+  - {field: hint, description: 'implementation hint, e.g. "Check the `client_id` parameter"'}
+  - {field: message, description: duplicate of error_description}
+- name: laravel-message
+  applies_to: https://app.cybrary.it/courses/api/*
+  media_type: application/json
+  fields:
+  - {field: message, description: human-readable error message}
+problems:
+- status: 400
+  code: invalid_request
+  title: Malformed token request
+  envelope: oauth-error
+  detail: >-
+    The request is missing a required parameter, includes an invalid parameter value,
+    includes a parameter more than once, or is otherwise malformed.
+  remediation: Send grant_type=client_credentials with scope=use-integrations and
+    Basic client authentication.
+  source_operation: openapi/cybrary-completions-export-openapi.yml (securitySchemes.oauth2.clientCredentials)
+  observed: true
+  observed_body: '{"error":"invalid_request","error_description":"The request is missing
+    a required parameter, includes an invalid parameter value, includes a parameter
+    more than once, or is otherwise malformed.","hint":"Check the `client_id` parameter","message":"..."}'
+- status: 401
+  code: invalid_client
+  title: Client authentication failed
+  envelope: oauth-error
+  detail: The client credentials issued by Cybrary were missing, wrong, or not sent
+    as a Basic Authorization header.
+  remediation: Re-check the credentials issued by your Cybrary Customer Success Manager.
+  source_operation: openapi/cybrary-completions-export-openapi.yml
+  observed: false
+- status: 401
+  code: unauthorized
+  title: Missing or expired access token
+  envelope: laravel-message
+  detail: The bearer token was absent, expired, or lacked the use-integrations scope.
+  remediation: Request a fresh token from /auth/oauth/token with scope use-integrations.
+  source_operation: openapi/cybrary-completions-export-openapi.yml#listCompletionExports
+  observed: false
+- status: 404
+  code: not_found
+  title: No export for the requested date
+  envelope: laravel-message
+  detail: No daily export exists for the {date} path parameter supplied.
+  remediation: Call listCompletionExports first and use a date returned in that list.
+  source_operation: openapi/cybrary-completions-export-openapi.yml#getCompletionExportByDate
+  observed: false
+- status: 500
+  code: server_error
+  title: Server Error
+  envelope: laravel-message
+  detail: >-
+    Returned by the export endpoints for an unauthenticated request; the API answers
+    500 rather than 401 when no credentials are presented.
+  remediation: Attach a valid bearer token. Note the non-standard status — treat 500
+    on these paths as a possible auth failure, not only an outage.
+  source_operation: openapi/cybrary-completions-export-openapi.yml#listCompletionExports
+  observed: true
+  observed_body: '{"message": "Server Error"}'
+gaps:
+- No published error reference page.
+- No stable machine-readable error codes on the resource endpoints — only a prose message.
+- Unauthenticated requests return 500 instead of 401, which makes auth failures hard
+  to distinguish from outages.

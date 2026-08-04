@@ -1,0 +1,106 @@
+generated: '2026-08-04'
+method: derived
+source: openapi/cybrary-completions-export-openapi.yml
+summary: >-
+  Entity graph of the Completions Export API. The model is the ADL xAPI statement
+  triple — Actor (learner), Verb, Object (activity) — plus a Result, wrapped in a
+  daily export envelope. Cybrary-specific identity and measurement live in the
+  xAPI extensions rather than in first-class fields.
+entities:
+- name: ExportListEntry
+  description: One available daily export.
+  schema: '#/components/schemas/ExportList'
+  identifier: date
+  identifier_format: MM_DD_YYYY
+  fields: [date, url]
+- name: CompletionExport
+  description: The daily export document — an array of xAPI statements for one UTC day.
+  schema: '#/components/schemas/CompletionExport'
+  file_naming: xapi_completion_export_DD_MM_YYYY.json
+  cardinality: one document per UTC day
+- name: XapiStatement
+  description: One completion event.
+  schema: '#/components/schemas/XapiStatement'
+  fields: [timestamp, actor, verb, result, object]
+- name: Actor
+  description: The learner who completed the activity.
+  schema: '#/components/schemas/Actor'
+  identifier: account.name
+  identifier_note: the id of the user in the Cybrary system
+  secondary_identifier: 'mbox (mailto: IRI of the learner email)'
+  pii: true
+- name: Verb
+  description: The xAPI verb. Always `completed` in the current implementation.
+  schema: '#/components/schemas/Verb'
+  identifier: id
+  vocabulary: http://adlnet.gov/expapi/verbs/
+- name: Result
+  description: Completion outcome flags.
+  schema: '#/components/schemas/Result'
+  fields: [completion, success]
+- name: Activity
+  description: The Cybrary content object that was completed — Course, Lab, Assessment
+    or Career Path.
+  schema: '#/components/schemas/Activity'
+  identifier: id
+  identifier_format: URL to the page describing the activity
+  type_vocabulary: http://adlnet.gov/expapi/activities/
+  cybrary_identifier: definition.extensions['https://www.cybrary.it/contentDescriptionId']
+relationships:
+- from: ExportListEntry
+  to: CompletionExport
+  type: has_one
+  via: url
+  note: each list entry links to the retrievable export for that date
+- from: CompletionExport
+  to: XapiStatement
+  type: has_many
+  via: array items
+- from: XapiStatement
+  to: Actor
+  type: has_one
+  via: actor
+- from: XapiStatement
+  to: Verb
+  type: has_one
+  via: verb
+- from: XapiStatement
+  to: Result
+  type: has_one
+  via: result
+- from: XapiStatement
+  to: Activity
+  type: has_one
+  via: object
+- from: Actor
+  to: XapiStatement
+  type: has_many
+  via: actor.account.name
+  note: a learner accumulates one statement per completed activity across exports
+- from: Activity
+  to: XapiStatement
+  type: has_many
+  via: object.id
+extensions:
+- iri: https://www.cybrary.it/contentDescriptionId
+  on: Activity.definition.extensions
+  type: string
+  description: Cybrary id for the activity.
+- iri: https://www.cybrary.it/continuingEducationUnits
+  on: Activity.definition.extensions
+  type: number
+  description: Continuing education credits given for the activity.
+- iri: https://www.cybrary.it/learningHours
+  on: Activity.definition.extensions
+  type: number
+  description: Learning hours given for the activity object by Cybrary.
+activity_types:
+- Course
+- Lab
+- Assessment
+- Career Path
+notes:
+- The graph is read-only; there is no write surface and therefore no create/update
+  relationship direction.
+- Statements carry learner name and email, so exports are PII-bearing and should be
+  handled under the customer's own data-protection controls.

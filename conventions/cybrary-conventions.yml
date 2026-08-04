@@ -1,0 +1,85 @@
+generated: '2026-08-04'
+method: searched
+source: https://help.cybrary.it/completions-export-integration
+derived_from: openapi/cybrary-completions-export-openapi.yml
+summary: >-
+  Cross-cutting semantics of the Cybrary Completions Export API, taken from the
+  provider's published documentation and from live response headers observed on
+  2026-08-04. This is a small, read-only export API: three GET operations, OAuth 2.0
+  client credentials, and JSON xAPI payloads. Several conventions a general-purpose
+  API would carry — idempotency keys, pagination, field expansion, request-id tracing
+  — are genuinely ABSENT rather than undocumented, and are recorded as such.
+authentication:
+  style: oauth2-client-credentials
+  token_url: https://app.cybrary.it/auth/oauth/token
+  client_authentication: HTTP Basic Authorization header
+  scope: use-integrations
+  credential_issuance: issued by Cybrary to the customer organization
+  artifact: authentication/cybrary-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    No idempotency key header or parameter is documented or observed. The API is
+    read-only (three GET operations), so every call is naturally idempotent by HTTP
+    method; there is no write surface that would require one.
+pagination:
+  supported: false
+  note: >-
+    The export list returns the full set of available dates as a single JSON array
+    with no page/cursor parameters. Volume is bounded by one entry per UTC day.
+  partitioning: by date — each daily export is retrieved individually at
+    /integrations/completions/{date}, which is the de facto chunking mechanism.
+field_expansion:
+  supported: false
+sparse_fields:
+  supported: false
+metadata:
+  supported: true
+  mechanism: xAPI extensions
+  extensions:
+  - https://www.cybrary.it/contentDescriptionId
+  - https://www.cybrary.it/continuingEducationUnits
+  - https://www.cybrary.it/learningHours
+request_tracing:
+  request_id_header: null
+  observed: >-
+    Responses carry CloudFront correlation headers (x-amz-cf-id, x-amz-cf-pop) and
+    x-envoy-upstream-service-time from the istio-envoy edge, but no first-party
+    request-id header is documented or returned.
+versioning:
+  scheme: none
+  note: >-
+    No version segment in the path, no version header, no dated version train. The
+    documentation says the current implementation always emits the `completed` verb,
+    implying room to widen the verb set later without a version signal.
+  artifact: lifecycle/cybrary-lifecycle.yml
+error_envelope:
+  token_endpoint:
+    format: RFC 6749 OAuth error response
+    fields: [error, error_description, hint, message]
+    example_observed: '{"error":"invalid_request","error_description":"...","hint":"Check the `client_id` parameter","message":"..."}'
+  resource_endpoints:
+    format: Laravel-style JSON envelope
+    fields: [message]
+    example_observed: '{"message": "Server Error"}'
+  problem_json: false
+  artifact: errors/cybrary-problem-types.yml
+rate_limit_signaling:
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining]
+  reset_header: null
+  retry_after: null
+  artifact: rate-limits/cybrary-rate-limits.yml
+content_negotiation:
+  request: application/x-www-form-urlencoded on the token endpoint; no request body on the export operations
+  response: application/json
+cors:
+  observed: true
+  access_control_allow_origin: '*'
+  access_control_allow_methods: POST,GET,PUT,PATCH,DELETE,OPTIONS
+  access_control_allow_headers: AUTHORIZATION,Content-Type,x-cybrary-larp-team,x-cybrary-larp-user,x-cybrary-larp-role,x-release-tag
+data_standards:
+  payload_standard: xAPI (Experience API / ADL) statements
+  verb_vocabulary: http://adlnet.gov/expapi/verbs/
+  activity_vocabulary: http://adlnet.gov/expapi/activities/
+  timezone: UTC
+  artifact: conformance/cybrary-conformance.yml
