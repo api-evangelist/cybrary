@@ -32,32 +32,18 @@ tags:
 - SCIM
 - Security Awareness
 apis:
-- aid: cybrary:completions-export
-  name: Cybrary Completions Export API
-  description: 'REST API that exposes daily completion events for a Cybrary for Teams
-    organization. A completion event is generated whenever a member of the organization
-    completes a course, lab, assessment or career path. Exports are delivered as JSON
-    arrays of xAPI (Experience API / ADL) statements — actor, verb, object and result
-    — with Cybrary extensions carrying the content description id, continuing education
-    units and learning hours. One file is generated per UTC day; the API lists the
-    available export dates, retrieves a specific date, or retrieves the latest. Access
-    is OAuth 2.0 client credentials with the `use-integrations` scope; credentials
-    are issued by Cybrary to the customer.'
+- aid: cybrary:cybrary-completions-api
+  name: Cybrary Completions API
+  description: Daily completion-event exports as xAPI statements.
   humanURL: https://help.cybrary.it/completions-export-integration
   baseURL: https://app.cybrary.it/courses/api
   tags:
   - Completions
-  - xAPI
-  - Reporting
-  - Learning Records
-  - Integrations
   properties:
+  - type: OpenAPI
+    url: openapi/cybrary-completions-api-openapi.yml
   - type: Documentation
     url: https://help.cybrary.it/completions-export-integration
-  - type: OpenAPI
-    url: openapi/cybrary-completions-export-openapi.yml
-  - type: Overlay
-    url: overlays/cybrary-completions-export-overlay.yaml
   - type: Authentication
     url: authentication/cybrary-authentication.yml
   - type: OAuthScopes
@@ -68,32 +54,14 @@ apis:
     url: data-model/cybrary-data-model.yml
   - type: RateLimits
     url: rate-limits/cybrary-rate-limits.yml
-  x-evidence:
-    verified: '2026-08-04'
-    docs_url: https://help.cybrary.it/completions-export-integration
-    docs_http_status: 200
-    docs_names_endpoints: true
-    endpoint_checks:
-    - url: https://app.cybrary.it/courses/api/integrations/completions
-      method: GET
-      http_status: 500
-      note: unauthenticated request; live host answered with a JSON error envelope
-        and x-ratelimit headers
-    - url: https://app.cybrary.it/auth/oauth/token
-      method: GET
-      http_status: 405
-      note: 'Allow: POST — token endpoint present'
-    - url: https://app.cybrary.it/auth/oauth/token
-      method: POST
-      http_status: 400
-      note: returned RFC 6749 error envelope {"error":"invalid_request", ...} confirming
-        a live OAuth 2.0 token endpoint
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/cybrary-mcp.yml
 - type: Website
   url: https://www.cybrary.it/
 - type: Documentation
