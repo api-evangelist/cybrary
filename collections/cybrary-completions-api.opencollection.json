@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cybrary Export Completions API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Completions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available completion exports",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.cybrary.it/courses/api/integrations/completions",
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://app.cybrary.it/auth/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a list of exports by date that can be retrieved."
+        },
+        {
+          "info": {
+            "name": "Get the most recent completion export",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.cybrary.it/courses/api/integrations/completions/latest",
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://app.cybrary.it/auth/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "JSON response containing the most recently generated daily export."
+        },
+        {
+          "info": {
+            "name": "Get a completion export for a given date",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.cybrary.it/courses/api/integrations/completions/:date",
+            "params": [
+              {
+                "name": "date",
+                "value": "",
+                "type": "path",
+                "description": "Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://app.cybrary.it/auth/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "JSON response containing the export for the given date. The export covers events that happened on that date in the UTC time zone, and may include completions recorded for past dates."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

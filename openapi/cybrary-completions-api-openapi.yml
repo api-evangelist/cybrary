@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  title: Cybrary Export Completions API
+  version: '1.0'
+  summary: Daily xAPI completion-event exports for a Cybrary for Teams organization.
+  description: 'The Cybrary Completions Export Integration exposes completion events for a Cybrary for Teams organization. A completion event is generated when a member of the organization completes a Course, Lab, Assessment or Career Path. Exports are delivered as JSON arrays of xAPI (Experience API / ADL) statements. One export is generated per UTC day and named `xapi_completion_export_DD_MM_YYYY.json`.
+
+
+    NOT PUBLISHED BY CYBRARY. Cybrary documents this API in prose at https://help.cybrary.it/completions-export-integration but publishes no machine-readable specification. This OpenAPI was authored by API Evangelist from that published documentation; every path, method, security scheme, sample payload and field description below is transcribed from it. See `x-provenance`.'
+  contact:
+    name: Cybrary Customer Success
+    url: https://help.cybrary.it/hc/en-us
+  termsOfService: https://www.cybrary.it/terms-of-service
+servers:
+- url: https://app.cybrary.it/courses/api
+  description: Production
+tags:
+- name: Completions
+  description: Daily completion-event exports as xAPI statements.
+paths:
+  /integrations/completions:
+    get:
+      tags:
+      - Completions
+      operationId: listCompletionExports
+      summary: List available completion exports
+      description: Returns a list of exports by date that can be retrieved.
+      security:
+      - oauth2:
+        - use-integrations
+      responses:
+        '200':
+          description: List of available exports.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportList'
+              examples:
+                documented:
+                  summary: Export List Format (from Cybrary documentation)
+                  value:
+                  - date: 349200
+                    url: https://app.cybrary.it/courses/api/integrations/completions/01_25_2020
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /integrations/completions/latest:
+    get:
+      tags:
+      - Completions
+      operationId: getLatestCompletionExport
+      summary: Get the most recent completion export
+      description: JSON response containing the most recently generated daily export.
+      security:
+      - oauth2:
+        - use-integrations
+      responses:
+        '200':
+          description: The latest export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletionExport'
+              examples:
+                documented:
+                  $ref: '#/components/examples/DocumentedStatement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /integrations/completions/{date}:
+    get:
+      tags:
+      - Completions
+      operationId: getCompletionExportByDate
+      summary: Get a completion export for a given date
+      description: JSON response containing the export for the given date. The export covers events that happened on that date in the UTC time zone, and may include completions recorded for past dates.
+      security:
+      - oauth2:
+        - use-integrations
+      parameters:
+      - name: date
+        in: path
+        required: true
+        description: Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`.
+        schema:
+          type: string
+          example: 349200
+      responses:
+        '200':
+          description: The export for the requested date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompletionExport'
+              examples:
+                documented:
+                  $ref: '#/components/examples/DocumentedStatement'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: No export exists for the requested date.
+        '500':
+          $ref: '#/components/responses/ServerError'
+components:
+  schemas:
+    CompletionExport:
+      type: array
+      description: Array of objects in which each object contains a set of xAPI statements relevant to one completion event.
+      items:
+        $ref: '#/components/schemas/XapiStatement'
+    Error:
+      type: object
+      description: 'Error envelope. The OAuth token endpoint returns the RFC 6749 shape (`error`, `error_description`, `hint`, `message`); the resource endpoints return a Laravel-style `{ "message": "..." }` envelope.'
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+        hint:
+          type: string
+        message:
+          type: string
+    Actor:
+      type: object
+      description: The learner who completed the activity.
+      properties:
+        name:
+          type: string
+          description: User-provided name in the Cybrary system.
+        mbox:
+          type: string
+          description: Learner email as a `mailto:` IRI.
+        account:
+          type: object
+          properties:
+            homePage:
+              type: string
+              format: uri
+              description: https://www.cybrary.it (future use).
+            name:
+              type: string
+              description: The id of the user in the Cybrary system.
+    Activity:
+      type: object
+      description: The Cybrary activity that was completed.
+      properties:
+        id:
+          type: string
+          format: uri
+          description: URL to the page describing the activity.
+        definition:
+          type: object
+          properties:
+            type:
+              type: string
+              format: uri
+              description: Type of activity assigned to the activity object (course, lab, assessment).
+            name:
+              type: object
+              additionalProperties:
+                type: string
+              description: Title of the activity object in the given locale.
+            extensions:
+              type: object
+              description: Cybrary xAPI extensions.
+              properties:
+                https://www.cybrary.it/contentDescriptionId:
+                  type: string
+                  description: Cybrary id for the activity.
+                https://www.cybrary.it/continuingEducationUnits:
+                  type: number
+                  description: Number of continuing education credits given for the activity.
+                https://www.cybrary.it/learningHours:
+                  type: number
+                  description: Number of learning hours given for the activity object by Cybrary.
+    Result:
+      type: object
+      properties:
+        completion:
+          type: boolean
+        success:
+          type: boolean
+    XapiStatement:
+      type: object
+      description: An xAPI (Experience API) statement describing a completion event.
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: When the completion event occurred (UTC).
+        actor:
+          $ref: '#/components/schemas/Actor'
+        verb:
+          $ref: '#/components/schemas/Verb'
+        result:
+          $ref: '#/components/schemas/Result'
+        object:
+          $ref: '#/components/schemas/Activity'
+    ExportList:
+      type: array
+      description: Available daily exports.
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+            description: Date the export covers, in `MM_DD_YYYY` form.
+            example: 349200
+          url:
+            type: string
+            format: uri
+            description: Absolute URL to retrieve this export.
+    Verb:
+      type: object
+      description: The xAPI verb. In the current implementation this always states `completed`.
+      properties:
+        id:
+          type: string
+          format: uri
+          example: http://adlnet.gov/expapi/verbs/completed
+        display:
+          type: object
+          additionalProperties:
+            type: string
+  examples:
+    DocumentedStatement:
+      summary: Export Format (from Cybrary documentation)
+      value:
+      - timestamp: '2019-11-13T16:07:23.726Z'
+        actor:
+          name: John Doe
+          mbox: mailto:user@example.com
+          account:
+            homePage: https://www.cybrary.it/
+            name: '1985071'
+        verb:
+          id: http://adlnet.gov/expapi/verbs/completed
+          display:
+            en-US: completed
+        result:
+          completion: true
+          success: true
+        object:
+          id: https://www.cybrary.it/course/intro-to-data-science/
+          definition:
+            type: http://adlnet.gov/expapi/activities/course
+            name:
+              en-US: Intro to Data Science
+            extensions:
+              https://www.cybrary.it/contentDescriptionId: '8793'
+              https://www.cybrary.it/continuingEducationUnits: 4
+              https://www.cybrary.it/learningHours: 3.449
+  responses:
+    Unauthorized:
+      description: Missing, expired or insufficiently scoped access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            observed:
+              summary: Envelope observed on an unauthenticated probe, 2026-08-04
+              value:
+                message: Server Error
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 client credentials. Credentials are issued by Cybrary to the customer organization; client authentication is sent as a HTTP Basic Authorization header.
+      flows:
+        clientCredentials:
+          tokenUrl: https://app.cybrary.it/auth/oauth/token
+          scopes:
+            use-integrations: Access the Cybrary integrations APIs, including the completions export.
+x-provenance:
+  authored_by: API Evangelist
+  method: generated
+  generated: '2026-08-04'
+  source: https://help.cybrary.it/completions-export-integration
+  source_http_status: 200
+  source_last_updated: '2025-12-16'
+  published_by_provider: false
+  note: Derived from Cybrary's own published prose documentation, not from a provider specification. Paths, verbs, OAuth token URL, scope and the export payload shape are transcribed verbatim from the help-center article; nothing was invented. The live host was probed on 2026-08-04 and answered on all documented paths.
+  endpoint_probes:
+  - url: https://app.cybrary.it/courses/api/integrations/completions
+    method: GET
+    http_status: 500
+  - url: https://app.cybrary.it/auth/oauth/token
+    method: GET
+    http_status: 405
+    allow: POST
+  - url: https://app.cybrary.it/auth/oauth/token
+    method: POST
+    http_status: 400
+    body: RFC 6749 invalid_request

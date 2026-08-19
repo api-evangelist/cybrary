@@ -1,0 +1,673 @@
+{
+  "item": [
+    {
+      "id": "1abda6e1-4ced-41a1-b82f-685b2cbb3f87",
+      "name": "Completions",
+      "description": {
+        "content": "Daily completion-event exports as xAPI statements.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f66e81ad-220b-46dc-9112-c25fd49659ff",
+          "name": "List available completion exports",
+          "request": {
+            "name": "List available completion exports",
+            "description": {
+              "content": "Returns a list of exports by date that can be retrieved.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "integrations",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "use-integrations"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://app.cybrary.it/auth/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "55af2898-9520-4737-bc73-2d6a79c6ae82",
+              "name": "List of available exports.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"date\": 349200,\n    \"url\": \"https://app.cybrary.it/courses/api/integrations/completions/01_25_2020\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdfdce45-5879-412e-ac04-41bc4006d92f",
+              "name": "Missing, expired or insufficiently scoped access token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"error_description\": \"string\",\n  \"hint\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9e93d9d-a3b6-4152-a0da-9980618f7865",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8468d101-2b96-496d-9bf3-b8b2abac8b38",
+          "name": "Get the most recent completion export",
+          "request": {
+            "name": "Get the most recent completion export",
+            "description": {
+              "content": "JSON response containing the most recently generated daily export.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "integrations",
+                "completions",
+                "latest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "use-integrations"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://app.cybrary.it/auth/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f0bf774e-b4f6-4499-9486-fc5320481048",
+              "name": "The latest export.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"timestamp\": \"2019-11-13T16:07:23.726Z\",\n    \"actor\": {\n      \"name\": \"John Doe\",\n      \"mbox\": \"mailto:user@example.com\",\n      \"account\": {\n        \"homePage\": \"https://www.cybrary.it/\",\n        \"name\": \"1985071\"\n      }\n    },\n    \"verb\": {\n      \"id\": \"http://adlnet.gov/expapi/verbs/completed\",\n      \"display\": {\n        \"en-US\": \"completed\"\n      }\n    },\n    \"result\": {\n      \"completion\": true,\n      \"success\": true\n    },\n    \"object\": {\n      \"id\": \"https://www.cybrary.it/course/intro-to-data-science/\",\n      \"definition\": {\n        \"type\": \"http://adlnet.gov/expapi/activities/course\",\n        \"name\": {\n          \"en-US\": \"Intro to Data Science\"\n        },\n        \"extensions\": {\n          \"https://www.cybrary.it/contentDescriptionId\": \"8793\",\n          \"https://www.cybrary.it/continuingEducationUnits\": 4,\n          \"https://www.cybrary.it/learningHours\": 3.449\n        }\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df34ec4b-4399-4f36-9fad-451a841f0560",
+              "name": "Missing, expired or insufficiently scoped access token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"error_description\": \"string\",\n  \"hint\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46a16f8d-f35d-4689-aafa-9c1859cbe28b",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    "latest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e383e9b5-9424-4c16-9268-a2925c4c23f5",
+          "name": "Get a completion export for a given date",
+          "request": {
+            "name": "Get a completion export for a given date",
+            "description": {
+              "content": "JSON response containing the export for the given date. The export covers events that happened on that date in the UTC time zone, and may include completions recorded for past dates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "integrations",
+                "completions",
+                ":date"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "date",
+                  "description": "(Required) Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "use-integrations"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://app.cybrary.it/auth/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "aa5fb458-52d8-42eb-b43b-345fa16b7067",
+              "name": "The export for the requested date.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    ":date"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "date",
+                      "description": "(Required) Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"timestamp\": \"2019-11-13T16:07:23.726Z\",\n    \"actor\": {\n      \"name\": \"John Doe\",\n      \"mbox\": \"mailto:user@example.com\",\n      \"account\": {\n        \"homePage\": \"https://www.cybrary.it/\",\n        \"name\": \"1985071\"\n      }\n    },\n    \"verb\": {\n      \"id\": \"http://adlnet.gov/expapi/verbs/completed\",\n      \"display\": {\n        \"en-US\": \"completed\"\n      }\n    },\n    \"result\": {\n      \"completion\": true,\n      \"success\": true\n    },\n    \"object\": {\n      \"id\": \"https://www.cybrary.it/course/intro-to-data-science/\",\n      \"definition\": {\n        \"type\": \"http://adlnet.gov/expapi/activities/course\",\n        \"name\": {\n          \"en-US\": \"Intro to Data Science\"\n        },\n        \"extensions\": {\n          \"https://www.cybrary.it/contentDescriptionId\": \"8793\",\n          \"https://www.cybrary.it/continuingEducationUnits\": 4,\n          \"https://www.cybrary.it/learningHours\": 3.449\n        }\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8902a6b-c7ef-4f3f-84af-00942994ea42",
+              "name": "Missing, expired or insufficiently scoped access token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    ":date"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "date",
+                      "description": "(Required) Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"error_description\": \"string\",\n  \"hint\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "163edc67-f121-4b75-8485-54bf23016d74",
+              "name": "No export exists for the requested date.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    ":date"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "date",
+                      "description": "(Required) Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aafba564-9262-4835-88f5-b603ebe67a1b",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "integrations",
+                    "completions",
+                    ":date"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "date",
+                      "description": "(Required) Export date in `MM_DD_YYYY` form, as returned by `listCompletionExports`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Server Error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.cybrary.it/courses/api",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ed9d220c-064a-41e2-9832-ee905f9e143c",
+    "name": "Cybrary Export Completions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Cybrary Completions Export Integration exposes completion events for a Cybrary for Teams organization. A completion event is generated when a member of the organization completes a Course, Lab, Assessment or Career Path. Exports are delivered as JSON arrays of xAPI (Experience API / ADL) statements. One export is generated per UTC day and named `xapi_completion_export_DD_MM_YYYY.json`.\n\nNOT PUBLISHED BY CYBRARY. Cybrary documents this API in prose at https://help.cybrary.it/completions-export-integration but publishes no machine-readable specification. This OpenAPI was authored by API Evangelist from that published documentation; every path, method, security scheme, sample payload and field description below is transcribed from it. See `x-provenance`.\n\nContact Support:\n Name: Cybrary Customer Success",
+      "type": "text/plain"
+    }
+  }
+}
