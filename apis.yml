@@ -17,7 +17,7 @@ url: https://raw.githubusercontent.com/api-evangelist/cybrary/refs/heads/main/ap
 image: https://cdn.prod.website-files.com/63eef15e3ff8fd318e9a6888/645ef224f84b330beefae1e7_Cybrary%20Opengraph%20(1).png
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-04'
 modified: '2026-08-04'
 tags:
