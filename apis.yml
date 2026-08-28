@@ -14,6 +14,18 @@ description: 'Cybrary is a cybersecurity and IT skills-development platform used
   and career-path completion events as xAPI (Experience API) statements for ingestion
   into a customer LMS, HRIS or reporting warehouse.'
 url: https://raw.githubusercontent.com/api-evangelist/cybrary/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.prod.website-files.com/63eef15e3ff8fd318e9a6888/645ef224f84b330beefae1e7_Cybrary%20Opengraph%20(1).png
 x-type: company
 x-source: harvest:secondary-market
