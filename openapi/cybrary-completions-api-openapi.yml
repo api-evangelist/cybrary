@@ -102,12 +102,6 @@ paths:
           $ref: '#/components/responses/ServerError'
 components:
   responses:
-    Unauthorized:
-      description: Missing, expired or insufficiently scoped access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     ServerError:
       description: Server error.
       content:
@@ -119,6 +113,12 @@ components:
               summary: Envelope observed on an unauthenticated probe, 2026-08-04
               value:
                 message: Server Error
+    Unauthorized:
+      description: Missing, expired or insufficiently scoped access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Result:
       type: object
@@ -147,32 +147,6 @@ components:
             name:
               type: string
               description: The id of the user in the Cybrary system.
-    Error:
-      type: object
-      description: 'Error envelope. The OAuth token endpoint returns the RFC 6749 shape (`error`, `error_description`, `hint`, `message`); the resource endpoints return a Laravel-style `{ "message": "..." }` envelope.'
-      properties:
-        error:
-          type: string
-        error_description:
-          type: string
-        hint:
-          type: string
-        message:
-          type: string
-    ExportList:
-      type: array
-      description: Available daily exports.
-      items:
-        type: object
-        properties:
-          date:
-            type: string
-            description: Date the export covers, in `MM_DD_YYYY` form.
-            example: 349200
-          url:
-            type: string
-            format: uri
-            description: Absolute URL to retrieve this export.
     Verb:
       type: object
       description: The xAPI verb. In the current implementation this always states `completed`.
@@ -201,6 +175,20 @@ components:
           $ref: '#/components/schemas/Result'
         object:
           $ref: '#/components/schemas/Activity'
+    ExportList:
+      type: array
+      description: Available daily exports.
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+            description: Date the export covers, in `MM_DD_YYYY` form.
+            example: 349200
+          url:
+            type: string
+            format: uri
+            description: Absolute URL to retrieve this export.
     Activity:
       type: object
       description: The Cybrary activity that was completed.
@@ -239,6 +227,18 @@ components:
       description: Array of objects in which each object contains a set of xAPI statements relevant to one completion event.
       items:
         $ref: '#/components/schemas/XapiStatement'
+    Error:
+      type: object
+      description: 'Error envelope. The OAuth token endpoint returns the RFC 6749 shape (`error`, `error_description`, `hint`, `message`); the resource endpoints return a Laravel-style `{ "message": "..." }` envelope.'
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+        hint:
+          type: string
+        message:
+          type: string
   examples:
     DocumentedStatement:
       summary: Export Format (from Cybrary documentation)
