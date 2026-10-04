@@ -101,25 +101,33 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 components:
-  responses:
-    ServerError:
-      description: Server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            observed:
-              summary: Envelope observed on an unauthenticated probe, 2026-08-04
-              value:
-                message: Server Error
-    Unauthorized:
-      description: Missing, expired or insufficiently scoped access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Verb:
+      type: object
+      description: The xAPI verb. In the current implementation this always states `completed`.
+      properties:
+        id:
+          type: string
+          format: uri
+          example: http://adlnet.gov/expapi/verbs/completed
+        display:
+          type: object
+          additionalProperties:
+            type: string
+    ExportList:
+      type: array
+      description: Available daily exports.
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+            description: Date the export covers, in `MM_DD_YYYY` form.
+            example: 349200
+          url:
+            type: string
+            format: uri
+            description: Absolute URL to retrieve this export.
     Result:
       type: object
       properties:
@@ -127,6 +135,18 @@ components:
           type: boolean
         success:
           type: boolean
+    Error:
+      type: object
+      description: 'Error envelope. The OAuth token endpoint returns the RFC 6749 shape (`error`, `error_description`, `hint`, `message`); the resource endpoints return a Laravel-style `{ "message": "..." }` envelope.'
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+        hint:
+          type: string
+        message:
+          type: string
     Actor:
       type: object
       description: The learner who completed the activity.
@@ -147,48 +167,11 @@ components:
             name:
               type: string
               description: The id of the user in the Cybrary system.
-    Verb:
-      type: object
-      description: The xAPI verb. In the current implementation this always states `completed`.
-      properties:
-        id:
-          type: string
-          format: uri
-          example: http://adlnet.gov/expapi/verbs/completed
-        display:
-          type: object
-          additionalProperties:
-            type: string
-    XapiStatement:
-      type: object
-      description: An xAPI (Experience API) statement describing a completion event.
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          description: When the completion event occurred (UTC).
-        actor:
-          $ref: '#/components/schemas/Actor'
-        verb:
-          $ref: '#/components/schemas/Verb'
-        result:
-          $ref: '#/components/schemas/Result'
-        object:
-          $ref: '#/components/schemas/Activity'
-    ExportList:
+    CompletionExport:
       type: array
-      description: Available daily exports.
+      description: Array of objects in which each object contains a set of xAPI statements relevant to one completion event.
       items:
-        type: object
-        properties:
-          date:
-            type: string
-            description: Date the export covers, in `MM_DD_YYYY` form.
-            example: 349200
-          url:
-            type: string
-            format: uri
-            description: Absolute URL to retrieve this export.
+        $ref: '#/components/schemas/XapiStatement'
     Activity:
       type: object
       description: The Cybrary activity that was completed.
@@ -222,23 +205,40 @@ components:
                 https://www.cybrary.it/learningHours:
                   type: number
                   description: Number of learning hours given for the activity object by Cybrary.
-    CompletionExport:
-      type: array
-      description: Array of objects in which each object contains a set of xAPI statements relevant to one completion event.
-      items:
-        $ref: '#/components/schemas/XapiStatement'
-    Error:
+    XapiStatement:
       type: object
-      description: 'Error envelope. The OAuth token endpoint returns the RFC 6749 shape (`error`, `error_description`, `hint`, `message`); the resource endpoints return a Laravel-style `{ "message": "..." }` envelope.'
+      description: An xAPI (Experience API) statement describing a completion event.
       properties:
-        error:
+        timestamp:
           type: string
-        error_description:
-          type: string
-        hint:
-          type: string
-        message:
-          type: string
+          format: date-time
+          description: When the completion event occurred (UTC).
+        actor:
+          $ref: '#/components/schemas/Actor'
+        verb:
+          $ref: '#/components/schemas/Verb'
+        result:
+          $ref: '#/components/schemas/Result'
+        object:
+          $ref: '#/components/schemas/Activity'
+  responses:
+    ServerError:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            observed:
+              summary: Envelope observed on an unauthenticated probe, 2026-08-04
+              value:
+                message: Server Error
+    Unauthorized:
+      description: Missing, expired or insufficiently scoped access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   examples:
     DocumentedStatement:
       summary: Export Format (from Cybrary documentation)
