@@ -102,32 +102,39 @@ paths:
           $ref: '#/components/responses/ServerError'
 components:
   schemas:
-    Verb:
+    Activity:
       type: object
-      description: The xAPI verb. In the current implementation this always states `completed`.
+      description: The Cybrary activity that was completed.
       properties:
         id:
           type: string
           format: uri
-          example: http://adlnet.gov/expapi/verbs/completed
-        display:
+          description: URL to the page describing the activity.
+        definition:
           type: object
-          additionalProperties:
-            type: string
-    ExportList:
-      type: array
-      description: Available daily exports.
-      items:
-        type: object
-        properties:
-          date:
-            type: string
-            description: Date the export covers, in `MM_DD_YYYY` form.
-            example: 349200
-          url:
-            type: string
-            format: uri
-            description: Absolute URL to retrieve this export.
+          properties:
+            type:
+              type: string
+              format: uri
+              description: Type of activity assigned to the activity object (course, lab, assessment).
+            name:
+              type: object
+              additionalProperties:
+                type: string
+              description: Title of the activity object in the given locale.
+            extensions:
+              type: object
+              description: Cybrary xAPI extensions.
+              properties:
+                https://www.cybrary.it/contentDescriptionId:
+                  type: string
+                  description: Cybrary id for the activity.
+                https://www.cybrary.it/continuingEducationUnits:
+                  type: number
+                  description: Number of continuing education credits given for the activity.
+                https://www.cybrary.it/learningHours:
+                  type: number
+                  description: Number of learning hours given for the activity object by Cybrary.
     Result:
       type: object
       properties:
@@ -172,39 +179,32 @@ components:
       description: Array of objects in which each object contains a set of xAPI statements relevant to one completion event.
       items:
         $ref: '#/components/schemas/XapiStatement'
-    Activity:
+    ExportList:
+      type: array
+      description: Available daily exports.
+      items:
+        type: object
+        properties:
+          date:
+            type: string
+            description: Date the export covers, in `MM_DD_YYYY` form.
+            example: 349200
+          url:
+            type: string
+            format: uri
+            description: Absolute URL to retrieve this export.
+    Verb:
       type: object
-      description: The Cybrary activity that was completed.
+      description: The xAPI verb. In the current implementation this always states `completed`.
       properties:
         id:
           type: string
           format: uri
-          description: URL to the page describing the activity.
-        definition:
+          example: http://adlnet.gov/expapi/verbs/completed
+        display:
           type: object
-          properties:
-            type:
-              type: string
-              format: uri
-              description: Type of activity assigned to the activity object (course, lab, assessment).
-            name:
-              type: object
-              additionalProperties:
-                type: string
-              description: Title of the activity object in the given locale.
-            extensions:
-              type: object
-              description: Cybrary xAPI extensions.
-              properties:
-                https://www.cybrary.it/contentDescriptionId:
-                  type: string
-                  description: Cybrary id for the activity.
-                https://www.cybrary.it/continuingEducationUnits:
-                  type: number
-                  description: Number of continuing education credits given for the activity.
-                https://www.cybrary.it/learningHours:
-                  type: number
-                  description: Number of learning hours given for the activity object by Cybrary.
+          additionalProperties:
+            type: string
     XapiStatement:
       type: object
       description: An xAPI (Experience API) statement describing a completion event.
@@ -221,24 +221,6 @@ components:
           $ref: '#/components/schemas/Result'
         object:
           $ref: '#/components/schemas/Activity'
-  responses:
-    ServerError:
-      description: Server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            observed:
-              summary: Envelope observed on an unauthenticated probe, 2026-08-04
-              value:
-                message: Server Error
-    Unauthorized:
-      description: Missing, expired or insufficiently scoped access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   examples:
     DocumentedStatement:
       summary: Export Format (from Cybrary documentation)
@@ -267,6 +249,24 @@ components:
               https://www.cybrary.it/contentDescriptionId: '8793'
               https://www.cybrary.it/continuingEducationUnits: 4
               https://www.cybrary.it/learningHours: 3.449
+  responses:
+    ServerError:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            observed:
+              summary: Envelope observed on an unauthenticated probe, 2026-08-04
+              value:
+                message: Server Error
+    Unauthorized:
+      description: Missing, expired or insufficiently scoped access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     oauth2:
       type: oauth2
